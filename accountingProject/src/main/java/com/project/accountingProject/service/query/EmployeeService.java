@@ -1,7 +1,9 @@
-package com.project.accountingProject.service;
+package com.project.accountingProject.service.query;
 
 import com.project.accountingProject.model.entity.Employee;
 import com.project.accountingProject.model.mapper.EmployeeMapper;
+import com.project.accountingProject.model.request.CreateEmployeeRequest;
+import com.project.accountingProject.model.request.UpdateEmployeeRequest;
 import com.project.accountingProject.model.response.EmployeeDto;
 import com.project.accountingProject.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,21 +55,33 @@ public class EmployeeService {
 
     }
 
-    public EmployeeDto createEmployee(EmployeeDto employee) {
-        Employee createEmployee = employeeRepository.save(employeeMapper.toEmployee(employee));
-        return employeeMapper.toEmployeeDto(createEmployee);
+    public Employee createEmployee(CreateEmployeeRequest request) {
+        Employee employee = new Employee();
+        if (request.getId() != null) employee.setId(request.getId());
+        employee.setName(request.getName());
+        employee.setSurname(request.getSurname());
+        employee.setBirthDate(request.getBirthDate());
+        employee.setId(request.getId());
+        employee.setContactInfo(request.getContactInfo());
+        employee.setIdentityNumber(request.getIdentityNumber());
+        employee.setJobInfo(request.getJobInfo());
+
+        return employeeRepository.save(employee);
+
     }
 
-    public EmployeeDto getEmployeeById(String identityNumber) {
-        Employee employee = employeeRepository.findByEmployeeId(identityNumber).orElseThrow();
-        return employeeMapper.toEmployeeDto(employee);
+    public Employee getEmployeeUpdate(UpdateEmployeeRequest request ,String id) {
+        Employee employee = employeeRepository.findByEmployeeId(id);
+        employee.setName(request.getName());
+        employee.setSurname(request.getSurname());
+        return employeeRepository.save(employee);
     }
 
-//    public EmployeeDto updateEmployee(UUID id) {
-//        Employee employee = employeeRepository.findById(id).orElseThrow();
-//        return employeeMapper.toEmployeeDto(employee);
-//
-//    }
+
+    public Employee getEmployee(String id) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(UUID.fromString(id));
+        return optionalEmployee.orElse(null);
+    }
 
 
     public void deleteEmployee(String id) {

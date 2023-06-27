@@ -1,7 +1,6 @@
 package com.project.accountingProject.model.entity;
 
 import com.project.accountingProject.model.entity.enums.PermitType;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,6 @@ public class Permit {
     @GeneratedValue
     @Column(length = 36)
     private UUID id;
-
 
     @Column(nullable = false)
     private LocalDate startDate;

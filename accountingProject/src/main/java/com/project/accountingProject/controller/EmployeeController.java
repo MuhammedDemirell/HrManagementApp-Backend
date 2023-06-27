@@ -1,8 +1,11 @@
 package com.project.accountingProject.controller;
 
 
+import com.project.accountingProject.model.entity.Employee;
+import com.project.accountingProject.model.request.CreateEmployeeRequest;
+import com.project.accountingProject.model.request.UpdateEmployeeRequest;
 import com.project.accountingProject.model.response.EmployeeDto;
-import com.project.accountingProject.service.EmployeeService;
+import com.project.accountingProject.service.query.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,31 +29,25 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
+
     @PostMapping("/create")
-    public ResponseEntity<EmployeeDto> createEmployee(@Valid @RequestBody EmployeeDto employee) {
-        return ResponseEntity.ok(employeeService.createEmployee(employee));
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
+        return ResponseEntity.ok(employeeService.createEmployee(request));
     }
 
-
-    @GetMapping("/update/{id}")
-    public ResponseEntity<EmployeeDto> getEditEmployeePage(@PathVariable @RequestParam("id") String identityNumber) {
-        EmployeeDto employeeDto = employeeService.getEmployeeById(identityNumber);
-        return ResponseEntity.ok(employeeDto);
-
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable String id) {
+        Employee employee = employeeService.getEmployee(id);
+        if (employee != null) {
+            return ResponseEntity.ok(employee);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/update/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable String identityNumber) {
-        EmployeeDto employeeDto = employeeService.getEmployeeById(identityNumber);
-        EmployeeDto employeeDto1 = new EmployeeDto();
-        employeeDto1.setId(employeeDto.getId());
-        employeeDto1.setName(employeeDto.getName());
-        employeeDto1.setSurname(employeeDto.getSurname());
-        employeeDto1.setIdentityNumber(employeeDto.getIdentityNumber());
-        employeeDto1.setJobInfo(employeeDto.getJobInfo());
-        employeeDto1.setContactInfo(employeeDto.getContactInfo());
-        employeeDto1.setBirthDate(employeeDto.getBirthDate());
-
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable @RequestParam("id") String identityNumber, @RequestBody UpdateEmployeeRequest request) {
+        Employee employeeDto = employeeService.getEmployeeUpdate(request, identityNumber);
         return ResponseEntity.ok(employeeDto);
 
     }
