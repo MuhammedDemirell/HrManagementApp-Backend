@@ -13,9 +13,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
     @Query("select x from Expense x join fetch x.employee e")
     List<Expense> findAllExpenses();
 
-    @Modifying
-    @Query("DELETE FROM Employee e WHERE e.identityNumber = :identityNumber")
-    void deleteByIdEmployee(String identityNumber);
 
     @Query("select x from Expense x join fetch x.employee e where e.identityNumber = :identityNumber")
     List<Expense> findAllExpensesByIdEmployee(String identityNumber);

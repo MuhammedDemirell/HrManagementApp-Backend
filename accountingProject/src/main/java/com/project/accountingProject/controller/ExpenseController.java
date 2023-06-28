@@ -57,9 +57,9 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteExpense(@PathVariable String identityNumber) {
+    public void deleteExpense(@PathVariable String id) {
 
-        expenseQueryService.deleteByIdExpense(identityNumber);
+        expenseQueryService.deleteByIdExpense(id);
     }
 
 }

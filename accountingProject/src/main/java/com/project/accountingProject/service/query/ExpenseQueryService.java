@@ -6,7 +6,6 @@ import com.project.accountingProject.model.mapper.ExpenseMapper;
 import com.project.accountingProject.model.request.UpdateEmployeeRequest;
 import com.project.accountingProject.model.request.UpdateExpenseUpdate;
 import com.project.accountingProject.model.response.ExpenseDto;
-import com.project.accountingProject.repository.EmployeeRepository;
 import com.project.accountingProject.repository.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -50,7 +50,7 @@ public class ExpenseQueryService {
 
 
     public void deleteByIdExpense(String identityNumber) {
-        expenseRepository.deleteByIdEmployee(identityNumber);
+        expenseRepository.deleteById(UUID.fromString(identityNumber));
     }
 
     public Expense updateExpense(String identityNumber, UpdateExpenseUpdate request) {
